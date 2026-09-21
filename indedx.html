@@ -1,0 +1,182 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cmath>
+#include <climits>
+#include <iomanip>
+
+using namespace std;
+
+// ---------- Преобразование числа в слова ----------
+
+string digitToWord(short d, bool female = false) {
+    static const char* male[]   = {"ноль","один","два","три","четыре",
+                                   "пять","шесть","семь","восемь","девять"};
+    static const char* femaleArr[] = {"ноль","одна","две","три","четыре",
+                                      "пять","шесть","семь","восемь","девять"};
+    return female ? femaleArr[d] : male[d];
+}
+
+string teenToWord(short n) { // 10..19
+    static const char* words[] = {"десять","одиннадцать","двенадцать","тринадцать",
+        "четырнадцать","пятнадцать","шестнадцать","семнадцать","восемнадцать","девятнадцать"};
+    return words[n - 10];
+}
+
+string tensToWord(short n) { // 20..90 кратно 10
+    static const char* words[] = {"","","двадцать","тридцать","сорок",
+        "пятьдесят","шестьдесят","семьдесят","восемьдесят","девяносто"};
+    return words[n / 10];
+}
+
+string hundredsToWord(short n) {
+    static const char* words[] = {"","сто","двести","триста","четыреста",
+        "пятьсот","шестьсот","семьсот","восемьсот","девятьсот"};
+    return words[n / 100];
+}
+
+// Триада: число 0..999 -> слова. female — для "одна/две тысячи"
+string triadToWords(int n, bool female) {
+    string result;
+    short h = n / 100;
+    short t = (n / 10) % 10;
+    short u = n % 10;
+
+    if (h) result += string(hundredsToWord(h)) + " ";
+
+    if (t == 1) {
+        result += string(teenToWord(n % 100)) + " ";
+    } else {
+        if (t) result += string(tensToWord(t * 10)) + " ";
+        if (u) result += digitToWord(u, female) + " ";
+    }
+    return result;
+}
+
+// Склонение: 1 рубль / 2 рубля / 5 рублей
+string pluralForm(long long n, const string& one, const string& few, const string& many) {
+    long long m100 = n % 100;
+    long long m10  = n % 10;
+    if (m100 >= 11 && m100 <= 14) return many;
+    if (m10 == 1) return one;
+    if (m10 >= 2 && m10 <= 4) return few;
+    return many;
+}
+
+// Основная функция: сумма копеек -> прописью
+string moneyToWords(long long kopeks) {
+    if (kopeks == 0) return "ноль рублей 00 копеек";
+
+    bool negative = kopeks < 0;
+    if (negative) kopeks = -kopeks;
+
+    long long rub = kopeks / 100;
+    short kop = (short)(kopeks % 100);
+
+    string result;
+    if (negative) result += "минус ";
+
+    if (rub == 0) {
+        result += "ноль рублей ";
+    } else {
+        // Разбиваем на триады: млрд, млн, тыс, единицы
+        static const char* triadNames[4]   = {"", "тысяч", "миллион", "миллиард"};
+        static const char* triadNames1[4]  = {"", "тысяча", "миллион", "миллиард"};
+        static const char* triadNames2[4]  = {"", "тысячи", "миллиона", "миллиарда"};
+        static const char* triadNames5[4]  = {"", "тысяч", "миллионов", "миллиардов"};
+        static const bool  femaleTriad[4]  = {false, true, false, false};
+
+        vector<int> triads;
+        long long tmp = rub;
+        while (tmp > 0) { triads.push_back(tmp % 1000); tmp /= 1000; }
+
+        for (int i = (int)triads.size() - 1; i >= 0; --i) {
+            if (triads[i] == 0) continue;
+            result += triadToWords(triads[i], femaleTriad[i]);
+            if (i > 0) {
+                string form;
+                int t = triads[i];
+                int m100 = t % 100, m10 = t % 10;
+                if (m100 >= 11 && m100 <= 14) form = triadNames5[i];
+                else if (m10 == 1)            form = triadNames1[i];
+                else if (m10 >= 2 && m10 <= 4) form = triadNames2[i];
+                else                          form = triadNames5[i];
+                result += form + " ";
+            }
+        }
+        result += pluralForm(rub, "рубль", "рубля", "рублей");
+    }
+
+    // Копейки
+    result += " " + to_string(kop) + " ";
+    result += pluralForm(kop, "копейка", "копейки", "копеек");
+    return result;
+}
+
+// ---------- Демонстрация проблемы float ----------
+
+void demonstrateFloatProblem() {
+    cout << "\n=== Почему float/double плохо для денег ===\n";
+
+    float  f = 0.1f + 0.2f;
+    double d = 0.1 + 0.2;
+    long double ld = 0.1L + 0.2L;
+
+    cout << setprecision(20);
+    cout << "float:       0.1 + 0.2 = " << f  << "\n";
+    cout << "double:      0.1 + 0.2 = " << d  << "\n";
+    cout << "long double: 0.1 + 0.2 = " << ld << "\n";
+
+    // Пример с деньгами
+    float money = 1234.56f;
+    cout << "\nfloat money = 1234.56f -> " << money << "\n";
+    cout << "(реально хранится ~1234.5599365234...)\n";
+
+    // Накопление ошибки
+    float sum = 0.0f;
+    for (int i = 0; i < 100000; ++i) sum += 0.01f;
+    cout << "\n100000 * 0.01f = " << sum << " (ожидалось 1000)\n";
+
+    cout << "\nВывод: для денег используем целое (long long) в копейках!\n";
+}
+
+// ---------- Округление до копеек ----------
+
+long long roundToKopeks(long double amount) {
+    // Округляем до 2 знаков и переводим в копейки
+    return (long long)llroundl(amount * 100.0L);
+}
+
+// ---------- main ----------
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+
+    demonstrateFloatProblem();
+
+    long double amount;
+    cout << "\nВведите сумму в рублях (например, 1234.567): ";
+    cin >> amount;
+
+    long long kopeks = roundToKopeks(amount);
+
+    cout << "\n--- Результат ---\n";
+    cout << "Введено:            " << (double)amount << "\n";
+    cout << "Округлено до копеек: " << kopeks / 100 << "." 
+         << setfill('0') << setw(2) << (kopeks % 100) << setfill(' ') << " руб\n";
+    cout << "Прописью: " << moneyToWords(kopeks) << "\n";
+
+    // Работа с типами (для отчёта)
+    short kopShort = (short)(kopeks % 100);   // копейки влезают в short
+    int rubInt = (int)(kopeks / 100);         // рубли в int
+    long long total = kopeks;                 // всё вместе
+
+    cout << "\n--- Типы ---\n";
+    cout << "short kopShort = " << kopShort << " (size " << sizeof(short) << ")\n";
+    cout << "int rubInt     = " << rubInt   << " (size " << sizeof(int) << ")\n";
+    cout << "long long total= " << total   << " (size " << sizeof(long long) << ")\n";
+    cout << "float  size = " << sizeof(float) << ", double = " << sizeof(double)
+         << ", long double = " << sizeof(long double) << "\n";
+
+    return 0;
+}
