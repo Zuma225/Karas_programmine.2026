@@ -1,0 +1,10 @@
+^C:\USERS\DANIL\DOCUMENTS\GITHUB\KARAS_PROGRAMMINE.2026\LAB_01\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/danil/Documents/GitHub/Karas_programmine.2026/Lab_01 -BC:/Users/danil/Documents/GitHub/Karas_programmine.2026/Lab_01/build --check-stamp-file C:/Users/danil/Documents/GitHub/Karas_programmine.2026/Lab_01/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
