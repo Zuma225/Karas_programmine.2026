@@ -1,0 +1,8 @@
+================================================================================
+Linker Errors
+Generated: 2026-09-25T19:14:10.257Z
+Total Errors: 1
+================================================================================
+
+[LNK1168] (MSVC)
+не удается открыть C:\Users\danil\Documents\GitHub\Karas_programmine.2026\Lab_01\build\Debug\lab17.exe для записи [C:\Users\danil\Documents\GitHub\Karas_programmine.2026\Lab_01\build\lab17.vcxproj]

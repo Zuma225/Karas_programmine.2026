@@ -34,29 +34,29 @@ static void setupConsole() {
 // ============================================================
 
 static string digitToWord(short d, bool female = false) {
-    static const char* male[]     = {"ноль","один","два","три","четыре",
-                                     "пять","шесть","семь","восемь","девять"};
-    static const char* femaleArr[]= {"ноль","одна","две","три","четыре",
-                                     "пять","шесть","семь","восемь","девять"};
+    static const char* male[]     = {"zero","one","two","three","four",
+                                     "five","six","seven","eight","nine"};
+    static const char* femaleArr[]= {"zero","one","two","three","four",
+                                     "five","six","seven","eight","nine"};
     return female ? femaleArr[d] : male[d];
 }
 
 static string teenToWord(short n) { // 10..19
     static const char* words[] = {
-        "десять","одиннадцать","двенадцать","тринадцать","четырнадцать",
-        "пятнадцать","шестнадцать","семнадцать","восемнадцать","девятнадцать"};
+        "ten","eleven","twelve","thirteen","fourteen",
+        "fifteen","sixteen","seventeen","eighteen","nineteen"};
     return words[n - 10];
 }
 
 static string tensToWord(short n) { // 20,30,...,90
-    static const char* words[] = {"","","двадцать","тридцать","сорок",
-        "пятьдесят","шестьдесят","семьдесят","восемьдесят","девяносто"};
+    static const char* words[] = {"","","twenty","thirty","forty",
+        "fifty","sixty","seventy","eighty","ninety"};
     return words[n / 10];
 }
 
 static string hundredsToWord(short n) { // 100..900
-    static const char* words[] = {"","сто","двести","триста","четыреста",
-        "пятьсот","шестьсот","семьсот","восемьсот","девятьсот"};
+    static const char* words[] = {"","one hundred","two hundred","three hundred","four hundred",
+        "five hundred","six hundred","seven hundred","eight hundred","nine hundred"};
     return words[n / 100];
 }
 
@@ -67,7 +67,7 @@ static string triadToWords(int n, bool female) {
     short t = static_cast<short>((n / 10) % 10);
     short u = static_cast<short>(n % 10);
 
-    if (h) result += string(hundredsToWord(h)) + " ";
+    if (h) result += string(hundredsToWord(static_cast<short>(n))) + " ";
 
     if (t == 1) {
         result += string(teenToWord(static_cast<short>(n % 100))) + " ";
@@ -91,7 +91,7 @@ static string pluralForm(long long n, const string& one,
 
 // Основная функция: копейки -> прописью
 static string moneyToWords(long long kopeks) {
-    if (kopeks == 0) return "ноль рублей 00 копеек";
+    if (kopeks == 0) return "zero rubles 00 kopecks";
 
     bool negative = kopeks < 0;
     if (negative) kopeks = -kopeks;
@@ -100,15 +100,15 @@ static string moneyToWords(long long kopeks) {
     short     kop = static_cast<short>(kopeks % 100);
 
     string result;
-    if (negative) result += "минус ";
+    if (negative) result += "minus ";
 
     if (rub == 0) {
-        result += "ноль рублей ";
+        result += "zero rubles ";
     } else {
         // Имена триад в четырёх формах
-        static const char* t0[4] = {"", "тысяча", "миллион", "миллиард"};   // 1
-        static const char* t2[4] = {"", "тысячи", "миллиона", "миллиарда"}; // 2-4
-        static const char* t5[4] = {"", "тысяч", "миллионов", "миллиардов"};// 5-20
+        static const char* t0[4] = {"", "thousand", "million", "billion"};   // 1
+        static const char* t2[4] = {"", "thousands", "millions", "billions"}; // 2-4
+        static const char* t5[4] = {"", "thousands", "millions", "billions"};// 5-20
         static const bool  female[4] = {false, true, false, false};
 
         vector<int> triads;
@@ -130,12 +130,12 @@ static string moneyToWords(long long kopeks) {
                 result += string(form) + " ";
             }
         }
-        result += pluralForm(rub, "рубль", "рубля", "рублей");
+        result += pluralForm(rub, "ruble", "rubles", "rubles");
     }
 
     // Копейки
     result += " " + to_string(kop) + " ";
-    result += pluralForm(kop, "копейка", "копейки", "копеек");
+    result += pluralForm(kop, "kopeck", "peanuts", "kopecks");
     return result;
 }
 
@@ -144,7 +144,7 @@ static string moneyToWords(long long kopeks) {
 // ============================================================
 
 static void demonstrateFloatProblem() {
-    cout << "\n=== Почему float/double плохо для денег ===\n";
+    cout << "\n=== Why float/double are bad for money ===\n";
 
     float       f  = 0.1f + 0.2f;
     double      d  = 0.1  + 0.2;
@@ -157,13 +157,13 @@ static void demonstrateFloatProblem() {
 
     float money = 1234.56f;
     cout << "\nfloat money = 1234.56f -> " << money << "\n";
-    cout << "(реально хранится ~1234.5599365234...)\n";
+    cout << "(Is actually stored ~1234.5599365234...)\n";
 
     float sum = 0.0f;
     for (int i = 0; i < 100000; ++i) sum += 0.01f;
-    cout << "\n100000 * 0.01f = " << sum << " (ожидалось 1000)\n";
+    cout << "\n100000 * 0.01f = " << sum << " (was expected 1000)\n";
 
-    cout << "\nВывод: для денег используем целое (long long) в копейках!\n";
+    cout << "\nConclusion: for money, an integer type (long long) representing the value in kopecks in used!\n";
 }
 
 // ============================================================
@@ -185,28 +185,28 @@ int main() {
     demonstrateFloatProblem();
 
     long double amount;
-    cout << "\nВведите сумму в рублях (например, 1234.567): ";
+    cout << "\nEnter the amount in rubles (e.g., 1234.567): ";
     if (!(cin >> amount)) {
-        cerr << "Ошибка: введено не число.\n";
+        cerr << "Error: a non-numberic value was entered.\n";
         return 1;
     }
 
     long long kopeks = roundToKopeks(amount);
 
-    cout << "\n--- Результат ---\n";
-    cout << "Введено:             " << static_cast<double>(amount) << "\n";
-    cout << "Округлено до копеек: "
+    cout << "\n--- Result ---\n";
+    cout << "Introduced:             " << static_cast<double>(amount) << "\n";
+    cout << "Rounding to the nearest kopeck: "
          << (kopeks / 100) << "."
          << setfill('0') << setw(2) << (kopeks % 100)
-         << setfill(' ') << " руб\n";
-    cout << "Прописью: " << moneyToWords(kopeks) << "\n";
+         << setfill(' ') << " rub\n";
+    cout << "In words: " << moneyToWords(kopeks) << "\n";
 
     // Работа с типами (для отчёта)
     short     kopShort = static_cast<short>(kopeks % 100);
     int       rubInt   = static_cast<int>(kopeks / 100);
     long long total    = kopeks;
 
-    cout << "\n--- Типы ---\n";
+    cout << "\n--- Types ---\n";
     cout << "short     kopShort = " << kopShort << " (size " << sizeof(short)     << ")\n";
     cout << "int       rubInt   = " << rubInt   << " (size " << sizeof(int)       << ")\n";
     cout << "long long total    = " << total    << " (size " << sizeof(long long) << ")\n";
