@@ -1,3 +1,0 @@
-C:/Users/danil/Documents/GitHub/Karas_programmine.2026/Lab_01/build/CMakeFiles/lab17.dir
-C:/Users/danil/Documents/GitHub/Karas_programmine.2026/Lab_01/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/danil/Documents/GitHub/Karas_programmine.2026/Lab_01/build/CMakeFiles/ZERO_CHECK.dir
