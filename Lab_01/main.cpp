@@ -185,6 +185,21 @@ static void part_4_precision() {
     const float kFloatMoney = 1234.56f;
     std::cout << "\nfloat money = 1234.56f -> " << kFloatMoney << '\n';
 
+    const int kBigInt = 123'456'789;
+    const float kBigAsFloat = static_cast<float>(kBigInt);
+
+    std::cout << "\nint  123'456'789              = " << kBigInt << '\n';
+    std::cout << "float(123'456'789)            = " << kBigAsFloat << '\n';
+    std::cout << "back to int via float         = "
+              << static_cast<int>(kBigAsFloat) << '\n';
+    std::cout << "difference (float - int)      = "
+              << (static_cast<long long>(kBigAsFloat) - kBigInt) << '\n';
+    std::cout << "(float can keep only ~7 significant decimal digits)\n";
+
+    // Для сравнения: double справляется с этим числом точно
+    const double kBigAsDouble = static_cast<double>(kBigInt);
+    std::cout << "double(123'456'789)           = " << kBigAsDouble << '\n';
+
     // Накопление ошибки: 100000 раз прибавляем 0.01f
     float sum = 0.0f;
     for (int i = 0; i < 100000; ++i) {
