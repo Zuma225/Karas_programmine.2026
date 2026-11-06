@@ -10,7 +10,7 @@ int main()
     std::cout << "=== Лабораторная работа N3. Вариант 8 ===\n";
 
     // ---------- Ч1. Логика и short-circuit ----------
-    std::cout << "\n=== Ч1. Логика и short-circuit ===\n";
+    std::cout << "\n=== CH1. Логика и short-circuit ===\n";
     int a, b, c;
     std::cout << "Введите три целых числа (a b c): ";
     if (!(std::cin >> a >> b >> c)) { std::cerr << "Ошибка ввода\n"; return 1; }
@@ -23,14 +23,13 @@ int main()
     std::cout << "Есть отрицательное? " << (anyNegative ? "да" : "нет") << "\n";
     std::cout << "Не все равны? " << (notAllEqual ? "да" : "нет") << "\n";
 
-    // short-circuit: правая часть &&/|| не вычисляется, если левая уже решает.
     std::cout << "a > 1000 && печать: " << ((a > 1000) && (std::cout << "[&& вызов]\n", true)) << "\n";
     std::cout << "a > -1000 && печать: " << ((a > -1000) && (std::cout << "[&& вызов]\n", true)) << "\n";
     std::cout << "a > -1000 || печать: " << ((a > -1000) || (std::cout << "[|| вызов]\n", true)) << "\n";
     std::cout << "a > 1000 || печать: " << ((a > 1000) || (std::cout << "[|| вызов]\n", true)) << "\n";
 
     // ---------- Ч2. if/else и switch ----------
-    std::cout << "\n=== Ч2. Условные операторы ===\n";
+    std::cout << "\n=== CH2. Условные операторы ===\n";
     int grade;
     std::cout << "Введите оценку (1..5): ";
     if (!(std::cin >> grade)) { std::cerr << "Ошибка ввода\n"; return 1; }
@@ -55,7 +54,7 @@ int main()
     }
 
     // ---------- Ч3. Первые N простых чисел ----------
-    std::cout << "\n=== Ч3. Первые N простых чисел ===\n";
+    std::cout << "\n=== CH3. Первые N простых чисел ===\n";
     int N;
     std::cout << "Введите N: ";
     if (!(std::cin >> N) || N <= 0) { std::cerr << "Ошибка ввода\n"; return 1; }
@@ -89,40 +88,40 @@ int main()
     std::cout << "\n";
 
     // ---------- Ч4. Массив: элементы больше среднего ----------
-    std::cout << "\n=== Ч4. Массив: элементы больше среднего ===\n";
-    const int SIZE = 10;
-    int arr[SIZE];
-    std::cout << "Введите " << SIZE << " целых чисел: ";
-    for (int i = 0; i < SIZE; ++i)
+    std::cout << "\n=== CH4. Массив: элементы больше среднего ===\n";
+    int arr[10];
+
+    std::cout << "Введите 10 целых чисел: ";
+    for (int i = 0; i < 10; ++i)
     {
         if (!(std::cin >> arr[i])) { std::cerr << "Ошибка ввода\n"; return 1; }
     }
 
     double sum = 0;
-    for (int i = 0; i < SIZE; ++i) sum = sum + arr[i];
-    double average = sum / SIZE;
+    for (int i = 0; i < 10; ++i) sum = sum + arr[i];
+    double average = sum / 10;
 
     int greaterThanAvg = 0;
-    for (int i = 0; i < SIZE; ++i)
+    for (int i = 0; i < 10; ++i)
         if (arr[i] > average) ++greaterThanAvg;
 
     std::cout << "Массив: ";
-    for (int i = 0; i < SIZE; ++i) std::cout << arr[i] << ' ';
+    for (int i = 0; i < 10; ++i) std::cout << arr[i] << ' ';
     std::cout << "\nСреднее: " << average << "\n";
     std::cout << "Больше среднего: " << greaterThanAvg << "\n";
 
-    // ---------- Ч6. Сортировка обменом ----------
+    // ---------- Ч6. Сортировка обменом (пузырьковая) ----------
     std::cout << "\n=== CH6. Сортировка обменом ===\n";
-    int copy[SIZE];
-    for (int i = 0; i < SIZE; ++i) copy[i] = arr[i];
+    int copy[10];
+    for (int i = 0; i < 10; ++i) copy[i] = arr[i];
 
     std::cout << "До: ";
-    for (int i = 0; i < SIZE; ++i) std::cout << copy[i] << ' ';
+    for (int i = 0; i < 10; ++i) std::cout << copy[i] << ' ';
     std::cout << "\n";
 
     int swapCount = 0;
-    for (int i = 0; i < SIZE - 1; ++i)
-        for (int j = 0; j < SIZE - 1 - i; ++j)
+    for (int i = 0; i < 10 - 1; ++i)
+        for (int j = 0; j < 10 - 1 - i; ++j)
             if (copy[j] > copy[j + 1])
             {
                 int tmp = copy[j];
@@ -132,11 +131,11 @@ int main()
             }
 
     std::cout << "После: ";
-    for (int i = 0; i < SIZE; ++i) std::cout << copy[i] << ' ';
+    for (int i = 0; i < 10; ++i) std::cout << copy[i] << ' ';
     std::cout << "\nОбменов: " << swapCount << "\n";
 
     // ---------- Ч5. Совершенное число ----------
-    std::cout << "\n=== Ч5. Совершенное число ===\n";
+    std::cout << "\n=== CH5. Совершенное число ===\n";
     int M;
     std::cout << "Введите N: ";
     if (!(std::cin >> M)) { std::cerr << "Ошибка ввода\n"; return 1; }
