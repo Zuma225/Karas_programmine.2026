@@ -85,7 +85,7 @@ int main() {
     print_section("Ч4. Макрос DEBUG_LOG");
 
     std::cout << "  Вызываем DEBUG_LOG для нескольких выражений.\n";
-    std::cout << "  Строки [DEBUG] печатаются в stderr, но в терминале\n";
+    std::cout << "  Строки [DEBUG] печатаются в stdcerr, но в терминале\n";
     std::cout << "  видны рядом с обычным выводом:\n";
 
     const double x = 3.0;
@@ -120,6 +120,5 @@ int main() {
     std::cout << "    - undefined reference  (забыли distance.cpp в сборке);\n";
     std::cout << "    - multiple definition  (определение в distance.h без inline).\n";
 
-    std::cout << "\nГотово. Все части ЛР4 продемонстрированы.\n";
     return 0;
 }
