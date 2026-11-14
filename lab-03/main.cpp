@@ -110,8 +110,10 @@ int main()
     std::cout << "\nСреднее: " << average << "\n";
     std::cout << "Больше среднего: " << greaterThanAvg << "\n";
 
-    // ---------- Ч6. Сортировка обменом (пузырьковая) ----------
+        // ---------- Ч6. Сортировка обменом (пузырьковая) через XOR ----------
     std::cout << "\n=== CH6. Сортировка обменом ===\n";
+    
+    // Копируем массив, чтобы не портить исходный (arr)
     int copy[10];
     for (int i = 0; i < 10; ++i) copy[i] = arr[i];
 
@@ -121,14 +123,20 @@ int main()
 
     int swapCount = 0;
     for (int i = 0; i < 10 - 1; ++i)
+    {
         for (int j = 0; j < 10 - 1 - i; ++j)
+        {
             if (copy[j] > copy[j + 1])
             {
-                int tmp = copy[j];
-                copy[j] = copy[j + 1];
-                copy[j + 1] = tmp;
+                // Обмен через XOR — никакой переменной tmp
+                copy[j]     = copy[j] ^ copy[j + 1];
+                copy[j + 1] = copy[j] ^ copy[j + 1];
+                copy[j]     = copy[j] ^ copy[j + 1];
+                
                 ++swapCount;
             }
+        }
+    }
 
     std::cout << "После: ";
     for (int i = 0; i < 10; ++i) std::cout << copy[i] << ' ';
